@@ -1,0 +1,54 @@
+{
+  "name": "duelforge-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Windows desktop shell for the DuelForge web application",
+  "productName": "DuelForge",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "prepare:web": "powershell -NoProfile -ExecutionPolicy Bypass -File ./prepare.ps1",
+    "start": "npm run prepare:web && electron .",
+    "pack:win": "npm run prepare:web && electron-builder --win dir --x64",
+    "dist:win": "npm run prepare:web && electron-builder --win nsis --x64",
+    "dist:portable": "npm run prepare:web && electron-builder --win portable --x64"
+  },
+  "devDependencies": {
+    "electron": "45.1.0",
+    "electron-builder": "26.18.0"
+  },
+  "build": {
+    "appId": "com.duelforge.desktop",
+    "productName": "DuelForge",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/**/*",
+      "web/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "npmRebuild": false,
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "DuelForge-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "DuelForge"
+    }
+  }
+}

@@ -76,4 +76,4 @@ The repository includes the Android project, but this README does not prescribe 
 
 ## License
 
-No license has been specified yet. Unless a license is added to this repository, the code is not granted an open-source license by default.
+DuelForge is licensed under the [Apache License 2.0](LICENSE). You may use, modify, and distribute the project under its terms. The license does not grant permission to use the DuelForge name or branding as a trademark.

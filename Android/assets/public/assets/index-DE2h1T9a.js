@@ -130871,9 +130871,9 @@ var Q5e = `JsonEditorVue`
                 class: `param-title`
             }, [Zi(`DuelForge`), V(`span`, {
                 class: `version-tag`
-            }, `Release 1.1`)]), V(`p`, {
+            }, `Release 1.2`)]), V(`p`, {
                 class: `param-desc`
-            }, `YGO Card Markers`)], -1), V(`div`, g7e, [(R(),
+            }, `Made by Mysticlad`)], -1), V(`div`, g7e, [(R(),
             z(Ii, null, Ur(a, e => V(`div`, {
                 key: e.value,
                 class: j([`card-type-item`, {

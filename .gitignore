@@ -4,9 +4,11 @@
 # Generated Android build output
 /Android/build/
 /Android/dist/
+**/*.apk
 
 # Generated Windows installers
 /Windows/release/
+**/*.exe
 
 # Generated Electron web copy
 /Windows/web/

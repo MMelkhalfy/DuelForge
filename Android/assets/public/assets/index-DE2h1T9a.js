@@ -75112,7 +75112,7 @@ var mLe = `KwAAAAAAAAAACA4AUD0AADAgAAACAAAAAAAIABAAGABAAEgAUABYAGAAaABgAGgAYgBqA
     get spellTrapName() {
         let e = ``;
         return this.data.language === `sc` ? (this.data.type === `spell` ? e = `魔法卡` : this.data.type === `trap` && (e = `陷阱卡`),
-        this.data.icon === `equip` ? e += `/装备` : this.data.icon === `field` ? e += `/场地` : this.data.icon === `quick-play` ? e += `/速攻` : this.data.icon === `ritual` ? e += `/仪式` : this.data.icon === `continuous` ? e += `/永续` : this.data.icon === `counter` && (e += `/反击`)) : this.data.language === `jp` && (this.data.type === `spell` ? e = `[魔(ま)][法(ほう)]カード` : this.data.type === `trap` && (e = `[罠(トラップ)]カード`),
+        this.data.icon === `equip` ? e += `/装备` : this.data.icon === `field` ? e += `/场地` : this.data.icon === `quick-play` ? e += `/速攻` : this.data.icon === `ritual` ? e += `/仪式` : this.data.icon === `continuous` ? e += `/永续` : this.data.icon === `counter` && (e += `/反击`)) : this.data.language === `en` ? (this.data.type === `spell` ? e = `Spell Card` : this.data.type === `trap` && (e = `Trap Card`)) : this.data.language === `jp` && (this.data.type === `spell` ? e = `[魔(ま)][法(ほう)]カード` : this.data.type === `trap` && (e = `[罠(トラップ)]カード`),
         this.data.icon === `equip` ? e += `／[装(そう)][備(び)]` : this.data.icon === `field` ? e += `／フィールド` : this.data.icon === `quick-play` ? e += `／[速(そっ)][攻(こう)]` : this.data.icon === `ritual` ? e += `／[儀(ぎ)][式(しき)]` : this.data.icon === `continuous` ? e += `／[永(えい)][続(ぞく)]` : this.data.icon === `counter` && (e += `／カウンター`)),
         e
     }
@@ -76882,7 +76882,7 @@ var mLe = `KwAAAAAAAAAACA4AUD0AADAgAAACAAAAAAAIABAAGABAAEgAUABYAGAAaABgAGgAYgBqA
     }
     get spellTrapName() {
         let e = ``;
-        return this.data.language === `jp` && (this.data.type === `spell` ? e = `[魔(ま)][法(ほう)]カード` : this.data.type === `trap` && (e = `[罠(トラップ)]カード`)),
+        return this.data.language === `en` ? (this.data.type === `spell` ? e = `Spell Card` : this.data.type === `trap` && (e = `Trap Card`)) : this.data.language === `jp` && (this.data.type === `spell` ? e = `[魔(ま)][法(ほう)]カード` : this.data.type === `trap` && (e = `[罠(トラップ)]カード`)),
         e
     }
     get showEffect() {
@@ -130871,7 +130871,7 @@ var Q5e = `JsonEditorVue`
                 class: `param-title`
             }, [Zi(`DuelForge`), V(`span`, {
                 class: `version-tag`
-            }, `Release 1.2`)]), V(`p`, {
+            }, `Release 1.2.1`)]), V(`p`, {
                 class: `param-desc`
             }, `Made by Mysticlad`)], -1), V(`div`, g7e, [(R(),
             z(Ii, null, Ur(a, e => V(`div`, {

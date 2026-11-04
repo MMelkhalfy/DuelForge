@@ -14,7 +14,8 @@
   },
   "devDependencies": {
     "electron": "45.1.0",
-    "electron-builder": "26.18.0"
+    "electron-builder": "26.18.0",
+    "electron-devtools-installer": "^4.0.0"
   },
   "build": {
     "appId": "com.duelforge.desktop",

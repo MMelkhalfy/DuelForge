@@ -97780,8 +97780,11 @@ var mLe = `KwAAAAAAAAAACA4AUD0AADAgAAACAAAAAAAIABAAGABAAEgAUABYAGAAaABgAGgAYgBqA
           `dark-synchro`,
           `token`,
           `xyz`,
+          `ra`,
+          `slifer`,
+          `obelisk`,
         ].includes(this.data.cardType) &&
-        ![`lg-dragon`, `ra`].includes(this.data.cardType)
+        ![`lg-dragon`].includes(this.data.cardType)
       );
     }
     get showRank() {

@@ -97749,13 +97749,14 @@ var mLe = `KwAAAAAAAAAACA4AUD0AADAgAAACAAAAAAAIABAAGABAAEgAUABYAGAAaABgAGgAYgBqA
       return this.data.type === `monster`
         ? `${this.baseImage}/card-${this.data.cardType}.png`
         : this.data.type === `pendulum`
-        ? `${this.baseImage}/card-${
-            this.data.pendulumType === `effect-pendulum` ? `effect` : `normal`
-          }.png`
+        ? `${this.baseImage}/card-${(
+            this.data.pendulumType || `normal-pendulum`
+          ).replace(/-pendulum$/, ``)}.png`
         : `${this.baseImage}/card-${this.data.type}.png`;
     }
     get attributeUrl() {
-      return this.data.type === `monster` && this.data.attribute
+      return (this.data.type === `monster` || this.data.type === `pendulum`) &&
+        this.data.attribute
         ? `${this.baseImage}/attribute-${this.data.attribute}${
             this.data.cardType === `link` ? `-link` : ``
           }.png`
@@ -97763,14 +97764,14 @@ var mLe = `KwAAAAAAAAAACA4AUD0AADAgAAACAAAAAAAIABAAGABAAEgAUABYAGAAaABgAGgAYgBqA
     }
     get showAttribute() {
       return (
-        this.data.type === `monster` &&
+        (this.data.type === `monster` || this.data.type === `pendulum`) &&
         !!this.data.attribute &&
         this.data.cardType !== `lg-dragon`
       );
     }
     get showLevel() {
       return (
-        this.data.type === `monster` &&
+        (this.data.type === `monster` || this.data.type === `pendulum`) &&
         [
           `normal`,
           `effect`,
@@ -97783,12 +97784,18 @@ var mLe = `KwAAAAAAAAAACA4AUD0AADAgAAACAAAAAAAIABAAGABAAEgAUABYAGAAaABgAGgAYgBqA
           `ra`,
           `slifer`,
           `obelisk`,
+          `zarc`,
         ].includes(this.data.cardType) &&
-        ![`lg-dragon`].includes(this.data.cardType)
+        ![`lg-dragon`].includes(this.data.cardType) &&
+        !(this.data.pendulumType === `xyz-pendulum`)
       );
     }
     get showRank() {
-      return this.data.type === `monster` && this.data.cardType === `xyz`;
+      return (
+        (this.data.type === `monster` && this.data.cardType === `xyz`) ||
+        (this.data.type === `pendulum` &&
+          this.data.pendulumType === `xyz-pendulum`)
+      );
     }
     // Stat boxes are their own layer (not baked into the card frames), so the pendulum layers can sit underneath them.
     get statBoxUrl() {
@@ -97865,7 +97872,14 @@ var mLe = `KwAAAAAAAAAACA4AUD0AADAgAAACAAAAAAAIABAAGABAAEgAUABYAGAAaABgAGgAYgBqA
         Math.min(12, Math.floor(Number(this.data.level) || 0)),
       );
       this.levelLeaf.children[0].set({
-        url: level ? `${this.baseImage}/level-${level}.png` : ``,
+        url: level
+          ? `${this.baseImage}/${
+              this.data.cardType === `dark-synchro` ||
+              this.data.pendulumType === `dark-synchro-pendulum`
+                ? `negative-level-${level}`
+                : `level-${level}`
+            }.png`
+          : ``,
         width: this.cardWidth,
         height: this.cardHeight,
       });
@@ -97913,14 +97927,14 @@ var mLe = `KwAAAAAAAAAACA4AUD0AADAgAAACAAAAAAAIABAAGABAAEgAUABYAGAAaABgAGgAYgBqA
       // Up / right / left are flush with the card edge (image box touches y=0, x=1394, x=0), like the down arrow,
       // which already ends at the frame's lower edge (1428 + 98 = 1526).
       let positions = [
-        [555, 0],
-        [1130, 299],
-        [1296, 761],
-        [1130, 1336],
-        [555, 1428],
-        [95, 1336],
-        [0, 758],
-        [95, 299],
+        [556, 18],
+        [1208, 18],
+        [1278, 622],
+        [1208, 1346],
+        [556, 1416],
+        [18, 1346],
+        [18, 619],
+        [18, 18],
       ];
       this.linkArrowLeaf.children.forEach((leaf, index) => {
         let active = this.data.arrowList?.includes(index + 1);
@@ -97945,26 +97959,58 @@ var mLe = `KwAAAAAAAAAACA4AUD0AADAgAAACAAAAAAAIABAAGABAAEgAUABYAGAAaABgAGgAYgBqA
         this.pendulumLeaf = new UA();
         this.pendulumLeaf.add(new oj());
         this.pendulumLeaf.add(new oj());
+        this.pendulumLeaf.add(new lj());
+        this.pendulumLeaf.add(new lj());
         this.leafer.add(this.pendulumLeaf);
       }
       let bottom = this.pendulumLeaf.children[0],
         scales = this.pendulumLeaf.children[1],
-        visible = this.data.type === `pendulum`;
+        leftScale = this.pendulumLeaf.children[2],
+        rightScale = this.pendulumLeaf.children[3],
+        isPendulum =
+          this.data.type === `pendulum` || this.data.cardType === `zarc`,
+        scale = String(
+          Math.max(0, Math.floor(Number(this.data.pendulumScale) || 0)),
+        );
       bottom.set({
         url: `${this.baseImage}/pendulum-bottom.png`,
         width: this.cardWidth,
         height: this.cardHeight,
-        visible,
+        visible: isPendulum,
         zIndex: 11,
       });
       scales.set({
         url: `${this.baseImage}/pendulum-scales.png`,
         width: this.cardWidth,
         height: this.cardHeight,
-        visible,
+        visible: isPendulum,
         zIndex: 12,
       });
-      this.pendulumLeaf.set({ visible, zIndex: 11 });
+      leftScale.set({
+        text: scale,
+        fontFamily: `ygo-mat`,
+        fontSize: 110,
+        fill: `black`,
+        textAlign: `center`,
+        width: 120,
+        x: 35,
+        y: 1370,
+        visible: isPendulum,
+        zIndex: 13,
+      });
+      rightScale.set({
+        text: scale,
+        fontFamily: `ygo-mat`,
+        fontSize: 110,
+        fill: `black`,
+        textAlign: `center`,
+        width: 120,
+        x: 1239,
+        y: 1370,
+        visible: isPendulum,
+        zIndex: 13,
+      });
+      this.pendulumLeaf.set({ visible: isPendulum, zIndex: 11 });
     }
     hideLeaf(leaf) {
       leaf && leaf.set({ visible: false });
@@ -158551,10 +158597,6 @@ var Q5e = `JsonEditorVue`,
                   value: `zarc`,
                 },
                 {
-                  label: `Orichalcos`,
-                  value: `orichalcos`,
-                },
-                {
                   label: `Legendary Dragon`,
                   value: `lg-dragon`,
                 },
@@ -158684,6 +158726,7 @@ var Q5e = `JsonEditorVue`,
           C = W(
             () =>
               (isYuGiOhTemplate.value ||
+                is4KidsTemplate.value ||
                 isRushDuelTemplate.value ||
                 isSeriesTwoTemplate.value) &&
               cardData.type === `monster`,
@@ -158710,7 +158753,10 @@ var Q5e = `JsonEditorVue`,
                   `astral`,
                   `numeron`,
                   `evolute`,
+                  `zarc`,
                 ].includes(cardData.cardType)) ||
+              ((isYuGiOhTemplate.value || is4KidsTemplate.value) &&
+                cardData.type === `pendulum`) ||
               (isRushDuelTemplate.value && cardData.type === `monster`) ||
               (isSeriesTwoTemplate.value && cardData.type === `monster`),
           ),
@@ -158729,7 +158775,8 @@ var Q5e = `JsonEditorVue`,
           O = W(
             () =>
               (isYuGiOhTemplate.value || is4KidsTemplate.value) &&
-              cardData.type === `pendulum`,
+              (cardData.type === `pendulum` ||
+                (cardData.type === `monster` && cardData.cardType === `zarc`)),
           ),
           ee = W(
             () =>
@@ -160197,7 +160244,7 @@ var Q5e = `JsonEditorVue`,
                             {
                               class: `version-tag`,
                             },
-                            `Release 1.2.1`,
+                            `Release 1.3`,
                           ),
                         ],
                       ),
@@ -160872,12 +160919,12 @@ var Q5e = `JsonEditorVue`,
                                     value: `synchro-pendulum`,
                                   }),
                                   H(Te, {
-                                    label: `Xyz Pendulum`,
-                                    value: `xyz-pendulum`,
+                                    label: `Dark Synchro Pendulum`,
+                                    value: `dark-synchro-pendulum`,
                                   }),
                                   H(Te, {
-                                    label: `Link Pendulum`,
-                                    value: `link-pendulum`,
+                                    label: `Xyz Pendulum`,
+                                    value: `xyz-pendulum`,
                                   }),
                                 ]),
                                 _: 1,
@@ -162087,27 +162134,17 @@ var Q5e = `JsonEditorVue`,
                   V(
                     `a`,
                     {
-                      href: `https://ygocdb.com/`,
+                      href: `https://ygoprodeck.com`,
                       target: `_blank`,
                       rel: `noopener`,
                     },
-                    `ygocdb.com`,
+                    `YGOPRO`,
                   ),
                   Zi(` · `),
                   V(
                     `a`,
                     {
-                      href: `http://www.ygotoken.com/`,
-                      target: `_blank`,
-                      rel: `noopener`,
-                    },
-                    `ygotoken.com`,
-                  ),
-                  Zi(` · `),
-                  V(
-                    `a`,
-                    {
-                      href: `https://github.com/iloveaimer/YuGiOh-Card`,
+                      href: `https://github.com/MMelkhalfy/DuelForge`,
                       target: `_blank`,
                       rel: `noopener`,
                     },
